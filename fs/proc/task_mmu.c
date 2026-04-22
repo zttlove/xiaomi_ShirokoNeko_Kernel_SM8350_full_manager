@@ -883,7 +883,7 @@ static int show_smap(struct seq_file *m, void *v)
 {
 	struct vm_area_struct *vma = v;
 	struct mem_size_stats mss;
-
+return 0;
 	memset(&mss, 0, sizeof(mss));
 
 	smap_gather_stats(vma, &mss);
