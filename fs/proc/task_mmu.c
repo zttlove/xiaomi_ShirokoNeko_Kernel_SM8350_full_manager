@@ -955,7 +955,7 @@ static int show_smaps_rollup(struct seq_file *m, void *v)
 
 	release_task_mempolicy(priv);
 	up_read(&mm->mmap_sem);
-
+return 0;
 out_put_mm:
 	mmput(mm);
 out_put_task:
