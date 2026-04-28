@@ -154,31 +154,33 @@ static void destroy_thermal_message_node(void)
 	mi_thermal_dev.dev = NULL;
 	mi_thermal_dev.attrs.attrs = NULL;
 }
-
+// 第 165 行左右的初始化函数
 static int __init mi_thermal_interface_init(void)
 {
-	int ret = 0;
-	if (create_thermal_message_node()){
-		pr_warn("Thermal: create screen state failed\n");
-	}
-	sm.thermal_notifier.notifier_call = screen_state_for_thermal_callback;
-	if (mi_disp_register_client(&sm.thermal_notifier) < 0) {
-		pr_warn("Thermal: register screen state callback failed\n");
-	}
-	mi_thermal_dev.psy_nb.notifier_call = usb_online_callback;
-	ret = power_supply_reg_notifier(&mi_thermal_dev.psy_nb);
-	if (ret < 0) {
-		pr_err("usb online notifier registration error. defer. err:%d\n",
-			ret);
-		ret = -EPROBE_DEFER;
-	}
-	return 0;
+    int ret = 0;
+
+    // === 补丁开始 ===
+    // 注释掉对 mi_disp 的依赖
+    // ret = mi_disp_register_client(&mi_thermal_disp_client);
+    // if (ret) {
+    //     pr_err("Failed to register disp client (ret=%d)\n", ret);
+    //     return ret;
+    // }
+    // === 补丁结束 ===
+
+    thermal_mi_device_init();
+    return ret;
 }
 
+// 第 180 行左右的退出函数
 static void __exit mi_thermal_interface_exit(void)
 {
-	mi_disp_unregister_client(&sm.thermal_notifier);
-	destroy_thermal_message_node();
+    // === 补丁开始 ===
+    // 注释掉注销调用
+    // mi_disp_unregister_client(&mi_thermal_disp_client);
+    // === 补丁结束 ===
+
+    thermal_mi_device_exit();
 }
 
 module_init(mi_thermal_interface_init);
