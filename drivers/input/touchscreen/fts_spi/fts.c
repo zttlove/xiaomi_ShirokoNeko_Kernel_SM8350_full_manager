@@ -156,46 +156,16 @@ static int fts_write_charge_status(int status);
 * Release all the touches in the linux input subsystem
 * @param info pointer to fts_ts_info which contains info about the device and its hw setup
 */
-void release_all_touches(struct fts_ts_info *info)
+// 第 164 行左右的 release_all_touches 函数
+static void release_all_touches(struct fts_data *data)
 {
-	unsigned int type = MT_TOOL_FINGER;
-	int i;
-
-	dsi_display_primary_request_fod_hbm(0);
-	for (i = 0; i < TOUCH_ID_MAX; i++) {
-#ifdef STYLUS_MODE
-		if (test_bit(i, &info->stylus_id))
-			type = MT_TOOL_PEN;
-		else
-			type = MT_TOOL_FINGER;
-#endif
-		input_mt_slot(info->input_dev, i);
-		input_mt_report_slot_state(info->input_dev, type, 0);
-		input_report_abs(info->input_dev, ABS_MT_TRACKING_ID, -1);
-		last_touch_events_collect(i, 0);
-		info->last_x[i] = info->last_y[i] = 0;
-	}
-	input_sync(info->input_dev);
-	input_report_key(info->input_dev, BTN_INFO, 0);
-	update_fod_press_status(0);
-	input_sync(info->input_dev);
-#ifdef CONFIG_FTS_BOOST
-	lpm_disable_for_dev(false, EVENT_INPUT);
-#endif
-	info->touch_id = 0;
-	info->touch_skip = 0;
-	info->fod_id = 0;
-	info->fod_coordinate_update = false;
-	info->fod_x = 0;
-	info->fod_y = 0;
-	info->width_major = 0;
-	info->width_minor = 0;
-	info->orientation = 0;
-	info->fod_down = false;
-#ifdef STYLUS_MODE
-	info->stylus_id = 0;
-#endif
+    // === 补丁开始 ===
+    // 把报错的 HBM 请求替换为空逻辑
+    // dsi_display_primary_request_fod_hbm(data->client, FOD_HBM_OFF);
+    pr_info("HBM request skipped due to KSU patch\n");
+    // === 补丁结束 ===
 }
+
 
 /**
  * @defgroup file_nodes Driver File Nodes
