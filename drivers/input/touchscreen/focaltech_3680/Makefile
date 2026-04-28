@@ -23,4 +23,4 @@ else
     LLVM_NM = $(CLANG)/bin/llvm-nm
     LD = $(CLANG)/bin/ld.lld
 .PHONY: clean
-
+endif
