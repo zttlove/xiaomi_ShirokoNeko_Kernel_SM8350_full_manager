@@ -16993,22 +16993,22 @@ const struct file_operations wlan_hdd_state_fops = {
 	.release = wlan_hdd_state_ctrl_param_release,
 };
 
-static int  wlan_hdd_state_ctrl_param_create(void)
-{
-	unsigned int wlan_hdd_state_major = 0;
-	int ret;
-	struct device *dev;
+//static int  wlan_hdd_state_ctrl_param_create(void)
+//{
+	//unsigned int wlan_hdd_state_major = 0;
+	//int ret;
+	//struct device *dev;
 
-	init_completion(&wlan_start_comp);
-	qdf_atomic_init(&wlan_hdd_state_fops_ref);
+	//init_completion(&wlan_start_comp);
+	//qdf_atomic_init(&wlan_hdd_state_fops_ref);
 
-	device = MKDEV(wlan_hdd_state_major, 0);
+	//device = MKDEV(wlan_hdd_state_major, 0);
 
-	ret = alloc_chrdev_region(&device, 0, dev_num, "qcwlanstate");
-	if (ret) {
-		pr_err("Failed to register qcwlanstate");
-		goto dev_alloc_err;
-	}
+	//ret = alloc_chrdev_region(&device, 0, dev_num, "qcwlanstate");
+	//if (ret) {
+		//pr_err("Failed to register qcwlanstate");
+		//goto dev_alloc_err;
+	//}
 	wlan_hdd_state_major = MAJOR(device);
 
 	class = class_create(THIS_MODULE, WLAN_MODULE_NAME);
